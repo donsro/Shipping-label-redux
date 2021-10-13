@@ -1,58 +1,48 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
+import React, { useState } from 'react';
+import { Sender } from './features/sender/Sender';
+import { Receiver } from './features/receiver/Receiver';
+import { Weight } from './features/weight/Weight';
+import { Shipping } from './features/shipping/Shipping';
+import { Confirmation } from './features/confirm/Confirm';
 import './App.css';
 
 function App() {
+  const [step, setStep] = useState(0);  
+  const WIZARD_STEPS = [
+    <Sender />,
+    <Receiver />,
+    <Weight />,
+    <Shipping />,
+    <Confirmation />
+  ];  
+  const prevNextProps = {
+    isNext: step !== WIZARD_STEPS.length - 1,
+    isPrev: step !== 0,
+    onStepChange: (go = 1) => { setStep(step + go); }
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
+    <div className="Appzzz container">
+      <h1 className="my-5 text-secondary">Shipping Label Maker</h1>
+      {WIZARD_STEPS[step]}
+      <PrevNext {...prevNextProps} />      
     </div>
   );
+}
+
+function PrevNext({ ...props }) {
+  const { isNext, isPrev, onStepChange } = props;
+  return <div className="my-5">
+      <div className="btn-group">
+          <button
+              className="btn btn-outline-primary"
+              disabled={!isPrev}
+              onClick={() => onStepChange(-1)}>Previous</button>
+          <button
+              className="btn btn-outline-primary"
+              disabled={!isNext}
+              onClick={() => onStepChange(1)}>Next</button>
+      </div>
+  </div>
 }
 
 export default App;
